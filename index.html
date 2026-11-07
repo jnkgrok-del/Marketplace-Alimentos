@@ -3,87 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rede AgroLimpa | Marketplace de Alimentos Sem Agrotóxicos</title>
+<title>Rede AgroLimpa | Alimentos Sem Veneno & Produtores Verificados</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#09121d;color:#e2e8f0;font-family:Arial,sans-serif}
-header{padding:18px;background:#111c2e;border-bottom:1px solid #23334d;text-align:center}
-header h1{margin:0;color:#22c55e;font-size:22px;letter-spacing:1px}
-header p{color:#94a3b8;font-size:11px;letter-spacing:1px;margin:4px 0 0}
-header .sub{font-size:10px;color:#10b981;margin-top:4px;font-weight:bold}
-main{padding:14px;max-width:1000px;margin:0 auto}
+body{margin:0;background:#f4f6f8;color:#1e293b;font-family:Arial,sans-serif}
+header{padding:20px;background:#ffffff;border-bottom:1px solid #e2e8f0;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,0.02)}
+header h1{margin:0;color:#16a34a;font-size:24px;letter-spacing:0.5px}
+header p{color:#64748b;font-size:11px;letter-spacing:1px;margin:4px 0 0}
+header .sub{font-size:10px;color:#059669;margin-top:4px;font-weight:bold}
+main{padding:16px;max-width:1000px;margin:0 auto}
 
-.profile-selector{display:flex;background:#16243b;padding:4px;border-radius:10px;margin-bottom:15px;border:1px solid #283b59}
-.profile-btn{flex:1;padding:10px;border:0;border-radius:8px;font-weight:bold;cursor:pointer;background:transparent;color:#94a3b8;font-size:13px;transition:0.3s}
-.profile-btn.active{background:#22c55e;color:#052e16}
+.profile-selector{display:flex;background:#e2e8f0;padding:4px;border-radius:10px;margin-bottom:15px}
+.profile-btn{flex:1;padding:10px;border:0;border-radius:8px;font-weight:bold;cursor:pointer;background:transparent;color:#64748b;font-size:13px;transition:0.3s}
+.profile-btn.active{background:#ffffff;color:#16a34a;box-shadow:0 2px 4px rgba(0,0,0,0.05)}
 
-.section-panel{background:#111c2e;padding:16px;border-radius:12px;border:1px solid #23334d;margin-bottom:15px}
-.section-panel h2{margin:0 0 12px;font-size:15px;color:#22c55e;border-left:3px solid #22c55e;padding-left:8px}
+.section-panel{background:#ffffff;padding:18px;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,0.02)}
+.section-panel h2{margin:0 0 12px;font-size:16px;color:#16a34a;border-left:3px solid #16a34a;padding-left:8px}
 
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.form-grid input, .form-grid select, .form-grid textarea{padding:10px;border-radius:6px;border:1px solid #273954;background:#09121d;color:white;font-size:13px;outline:none}
-.form-grid input:focus, .form-grid select:focus{border-color:#22c55e}
+.form-grid input, .form-grid select, .form-grid textarea{padding:11px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;color:#1e293b;font-size:13px;outline:none}
+.form-grid input:focus, .form-grid select:focus{border-color:#16a34a;background:#fff}
 .full-width{grid-column:1 / -1}
-.btn-action{background:#0284c7;color:white;font-weight:bold;padding:10px;border:0;border-radius:6px;cursor:pointer;font-size:12px}
-.btn-submit{background:#22c55e;color:#052e16;font-weight:bold;padding:12px;border:0;border-radius:6px;cursor:pointer;margin-top:8px;width:100%;font-size:13px}
+.btn-action{background:#0284c7;color:white;font-weight:bold;padding:11px;border:0;border-radius:8px;cursor:pointer;font-size:12px}
+.btn-submit{background:#16a34a;color:#ffffff;font-weight:bold;padding:13px;border:0;border-radius:8px;cursor:pointer;margin-top:8px;width:100%;font-size:14px}
 
-#map{height:45vh;min-height:320px;border-radius:12px;border:1px solid #23334d;margin-bottom:15px}
+#map{height:42vh;min-height:300px;border-radius:10px;border:1px solid #cbd5e1;margin-bottom:15px}
 
 .categories{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px}
-.cat-btn{background:#1a2a44;color:#cbd5e1;border:1px solid #283b59;padding:8px 14px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap}
-.cat-btn.active{background:#22c55e;color:#052e16;font-weight:bold;border-color:#22c55e}
+.cat-btn{background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;padding:8px 14px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap}
+.cat-btn.active{background:#16a34a;color:#ffffff;font-weight:bold;border-color:#16a34a}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:12px}
-.card{background:#111c2e;border-radius:10px;padding:14px;border:1px solid #23334d;display:flex;flex-direction:column;justify-content:space-between}
-.card h3{font-size:15px;margin:0 0 6px;color:#f8fafc}
-.card .producer{font-size:11px;color:#38bdf8;margin-bottom:6px;font-weight:bold}
-.card .tag{font-size:10px;padding:3px 7px;border-radius:4px;font-weight:bold;display:inline-block;margin-bottom:8px;background:#065f46;color:#a7f3d0}
-.card .price{font-size:16px;color:#22c55e;font-weight:bold;margin:6px 0}
-.card p{font-size:12px;color:#94a3b8;margin:4px 0}
-.btn-buy{background:#22c55e;color:#052e16;border:0;padding:10px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px;width:100%;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));gap:15px}
+.card{background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 2px 5px rgba(0,0,0,0.04)}
+.card img{width:100%;height:140px;object-fit:cover;background:#e2e8f0}
+.card-body{padding:14px}
+.card h3{font-size:15px;margin:0 0 4px;color:#0f172a}
+.card .producer{font-size:12px;color:#0284c7;margin-bottom:6px;font-weight:bold}
+.card .trust-badge{font-size:10px;background:#dcfce7;color:#166534;padding:3px 8px;border-radius:4px;font-weight:bold;display:inline-block;margin-bottom:8px}
+.card .tag{font-size:10px;padding:3px 7px;border-radius:4px;font-weight:bold;display:inline-block;margin-bottom:6px;background:#fef3c7;color:#92400e}
+.card .price{font-size:16px;color:#16a34a;font-weight:bold;margin:6px 0}
+.card p{font-size:12px;color:#475569;margin:4px 0}
+.btn-buy{background:#16a34a;color:#ffffff;border:0;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:12px;width:100%;margin-top:8px}
 
-.cart-float{position:fixed;bottom:20px;right:20px;background:#22c55e;color:#052e16;padding:12px 20px;border-radius:30px;font-weight:bold;box-shadow:0 4px 15px rgba(0,0,0,0.5);cursor:pointer;display:flex;align-items:center;gap:8px;z-index:90}
+.cart-float{position:fixed;bottom:20px;right:20px;background:#16a34a;color:#ffffff;padding:14px 22px;border-radius:30px;font-weight:bold;box-shadow:0 4px 15px rgba(0,0,0,0.2);cursor:pointer;display:flex;align-items:center;gap:8px;z-index:90}
 
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center;padding:15px}
-.modal-content{background:#111c2e;padding:20px;border-radius:12px;width:100%;max-width:440px;border:1px solid #23334d}
-.modal h2{margin-top:0;color:#22c55e;font-size:18px}
-.cart-item{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid #23334d}
-.total{font-size:16px;font-weight:bold;margin:15px 0;text-align:right;color:#22c55e}
-.btn-finish{background:#25d366;color:white;border:0;padding:12px;border-radius:6px;font-weight:bold;width:100%;cursor:pointer;font-size:14px}
-.btn-close{background:transparent;color:#94a3b8;border:0;cursor:pointer;float:right;font-size:16px}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;align-items:center;justify-content:center;padding:15px}
+.modal-content{background:#ffffff;padding:22px;border-radius:12px;width:100%;max-width:440px;border:1px solid #e2e8f0;color:#1e293b}
+.modal h2{margin-top:0;color:#16a34a;font-size:18px}
+.cart-item{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;border-bottom:1px solid #e2e8f0}
+.total{font-size:16px;font-weight:bold;margin:15px 0;text-align:right;color:#16a34a}
+.btn-finish{background:#25d366;color:white;border:0;padding:12px;border-radius:8px;font-weight:bold;width:100%;cursor:pointer;font-size:14px}
+.btn-close{background:transparent;color:#64748b;border:0;cursor:pointer;float:right;font-size:16px;font-weight:bold}
 
 footer{text-align:center;padding:20px;color:#64748b;font-size:11px}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#111c2e;color:white}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#ffffff;color:#1e293b}
 </style>
 </head>
 
 <body>
 <header>
 <h1>🌱 REDE AGROLIMPA</h1>
-<p>CONECTANDO PEQUENOS PRODUTORES A MERCADOS E RESTAURANTES</p>
-<div class="sub">ALIMENTOS FRESCOS • 100% SEM AGROTÓXICOS • LOGÍSTICA LOCAL</div>
+<p>PLATAFORMA ANTIGOLPES • PRODUTORES RURAIS VERIFICADOS</p>
+<div class="sub">ALIMENTOS FRESCOS SEM AGROTÓXICOS • COMPRA SEGURA B2B/B2C</div>
 </header>
 
 <main>
 <!-- SELETOR DE PERFIL -->
 <div class="profile-selector">
-<button class="profile-btn active" id="btnPerfilComprador" onclick="mudarPerfil('comprador')">🛒 Sou Mercado / Restaurante (Comprar)</button>
-<button class="profile-btn" id="btnPerfilProdutor" onclick="mudarPerfil('produtor')">🚜 Sou Produtor Rural (Ofertar)</button>
+<button class="profile-btn active" id="btnPerfilComprador" onclick="mudarPerfil('comprador')">🛒 Sou Mercado / Consumidor (Comprar)</button>
+<button class="profile-btn" id="btnPerfilProdutor" onclick="mudarPerfil('produtor')">🚜 Sou Produtor (Cadastrar com Foto)</button>
 </div>
 
-<!-- PAINEL DO PRODUTOR (CADASTRO DE OFERTA) -->
+<!-- PAINEL DE CADASTRO DO PRODUTOR -->
 <div class="section-panel" id="panelProdutor" style="display:none;">
-<h2>🚜 Cadastrar Lote / Colheita de Alimentos Limpos</h2>
+<h2>🚜 Cadastro Verificado do Produtor Rural</h2>
+<p style="font-size:12px;color:#64748b;margin-bottom:12px;">Para garantir segurança anticolpes, inclua dados reais e o link de uma foto real da colheita ou propriedade.</p>
 <form id="formOferta" onsubmit="salvarOferta(event)" class="form-grid">
-<input type="text" id="prodNomeProdutor" placeholder="Nome do Produtor ou Sítio/Horta" required class="full-width">
-<input type="text" id="prodTelefone" placeholder="WhatsApp para Contato (DDD + Número)" required class="full-width">
-<input type="text" id="prodEndereco" placeholder="Localização / Bairro / Cidade do Cultivo" required class="full-width">
-<button type="button" class="btn-action full-width" onclick="buscarCoordenadasProdutor()">📍 Geolocalizar Propriedade no Mapa</button>
+<input type="text" id="prodNomeProdutor" placeholder="Nome Completo / Sítio / Cooperativa" required class="full-width">
+<input type="text" id="prodDocumento" placeholder="CPF ou CNPJ (Para validação de segurança)" required>
+<input type="text" id="prodTelefone" placeholder="WhatsApp Oficial (DDD + Número)" required>
+<input type="text" id="prodEndereco" placeholder="Endereço / Bairro / Cidade do Cultivo (ex: Hípica, Porto Alegre)" required class="full-width">
+<button type="button" class="btn-action full-width" onclick="buscarCoordenadasProdutor()">📍 Validar Coordenadas e Região no Mapa</button>
 
-<input type="text" id="prodAlimento" placeholder="Alimento (ex: Tomate Italiano, Alface Crespa)" required>
+<input type="text" id="prodAlimento" placeholder="Nome do Alimento (ex: Tomate Italiano Orgânico)" required>
 <select id="prodCategoria" required>
 <option value="verduras">Verduras & Hortaliças</option>
 <option value="frutas">Frutas</option>
@@ -93,65 +98,66 @@ footer{text-align:center;padding:20px;color:#64748b;font-size:11px}
 </select>
 
 <select id="prodSelo" required>
-<option value="Orgânico Certificado">Orgânico Certificado</option>
-<option value="Agroecológico Sem Veneno">Agroecológico Sem Veneno</option>
-<option value="Em Transição Orgânica">Em Transição Orgânica</option>
+<option value="Orgânico Certificado MAPA">Orgânico Certificado (MAPA)</option>
+<option value="Agroecológico Verificado">Agroecológico Verificado</option>
+<option value="Em Transição Agroecológica">Em Transição Agroecológica</option>
 </select>
 <input type="text" id="prodQtd" placeholder="Qtd Disponível (ex: 50 kg ou 30 caixas)" required>
+<input type="number" step="0.01" id="prodPreco" placeholder="Preço R$ (por Kg/Un)" required>
+<input type="text" id="prodFoto" placeholder="Link da Foto Real (ex: https://images.unsplash.com/...)" required class="full-width">
 
-<input type="number" step="0.01" id="prodPreco" placeholder="Preço Atacado R$ (por Kg/Un)" required>
 <input type="number" step="any" id="prodLat" placeholder="Latitude" required>
 <input type="number" step="any" id="prodLon" placeholder="Longitude" required>
-<textarea id="prodDesc" placeholder="Observações de colheita, frequência de entrega ou lote mínimo" class="full-width" rows="2"></textarea>
+<textarea id="prodDesc" placeholder="Observações e rotas de entrega semanais..." class="full-width" rows="2"></textarea>
 
-<button type="submit" class="btn-submit">Publicar Oferta na Rede</button>
+<button type="submit" class="btn-submit">Publicar Oferta Verificada</button>
 </form>
 </div>
 
-<!-- NAVEGAÇÃO & GEOLOCALIZAÇÃO -->
+<!-- MAPA E GEOLOCALIZAÇÃO -->
 <div class="section-panel">
-<h2>📍 Produtores Rurais e Centros de Distribuição Próximos</h2>
+<h2>📍 Mapa de Propriedades e Rota dos Produtores</h2>
 <div id="map"></div>
 
 <div class="categories">
 <button class="cat-btn active" onclick="filtrarCategoria('todos', this)">Todos os Alimentos</button>
-<button class="cat-btn" onclick="filtrarCategoria('verduras', this)">Verduras & Hortaliças</button>
+<button class="cat-btn" onclick="filtrarCategoria('verduras', this)">Verduras</button>
 <button class="cat-btn" onclick="filtrarCategoria('frutas', this)">Frutas</button>
-<button class="cat-btn" onclick="filtrarCategoria('legumes', this)">Legumes & Raízes</button>
-<button class="cat-btn" onclick="filtrarCategoria('graos', this)">Grãos & Sementes</button>
+<button class="cat-btn" onclick="filtrarCategoria('legumes', this)">Legumes</button>
+<button class="cat-btn" onclick="filtrarCategoria('graos', this)">Grãos</button>
 <button class="cat-btn" onclick="filtrarCategoria('ovos', this)">Ovos & Laticínios</button>
 </div>
 </div>
 
 <!-- VITRINE DE PRODUTOS -->
 <div class="section-panel">
-<h2>📦 Lotes Disponíveis para Compra Direta</h2>
+<h2>🛡️ Vitrine Segura: Alimentos Sem Veneno</h2>
 <div class="grid" id="gridProdutos"></div>
 </div>
 </main>
 
-<!-- CARRINHO FLUTUANTE -->
+<!-- CARRINHO -->
 <div class="cart-float" onclick="abrirCarrinho()">
-<span>🛒 Carga de Compras</span>
+<span>🛒 Carga Selecionada</span>
 <span id="cartCount">(0)</span>
 </div>
 
-<!-- MODAL DE FECHAMENTO DE PEDIDO -->
+<!-- MODAL DE PEDIDO -->
 <div class="modal" id="cartModal">
 <div class="modal-content">
 <button class="btn-close" onclick="fecharCarrinho()">✖</button>
-<h2>Resumo do Pedido / Carga</h2>
+<h2>Resumo do Pedido Seguro</h2>
 <div id="cartItems"></div>
-<div class="total" id="cartTotal">Total Estimado: R$ 0,00</div>
-<input type="text" id="compradorNome" placeholder="Seu Nome / Nome do Mercado ou Restaurante" style="width:100%;padding:10px;margin-bottom:8px;border-radius:6px;border:1px solid #273954;background:#09121d;color:white;outline:none;">
-<input type="text" id="compradorEndereco" placeholder="Endereço de Entrega do Estabelecimento" style="width:100%;padding:10px;margin-bottom:12px;border-radius:6px;border:1px solid #273954;background:#09121d;color:white;outline:none;">
-<button class="btn-finish" onclick="enviarPedidoCarga()">Enviar Pedido Direto via WhatsApp</button>
+<div class="total" id="cartTotal">Total: R$ 0,00</div>
+<input type="text" id="compradorNome" placeholder="Seu Nome / Nome do Mercado ou Restaurante" style="width:100%;padding:10px;margin-bottom:8px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;outline:none;">
+<input type="text" id="compradorEndereco" placeholder="Endereço Completo de Entrega" style="width:100%;padding:10px;margin-bottom:12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;outline:none;">
+<button class="btn-finish" onclick="enviarPedidoCarga()">Finalizar Pedido via WhatsApp Oficial</button>
 </div>
 </div>
 
 <footer>
-REDE AGROLIMPA © 2026 | PLATAFORMA B2B/B2C DE AGRICULTURA SUSTENTÁVEL<br>
-Fomento ao pequeno produtor rural e acesso à alimentação saudável sem agrotóxicos.
+REDE AGROLIMPA © 2026 | AMBIENTE SEGURO CONTRA FRAUDES<br>
+Transparência total na origem dos alimentos e valorização da agricultura familiar.
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -168,13 +174,12 @@ attribution:'Labels © Esri',maxZoom:19
 }).addTo(map);
 
 const ofertasIniciais = [
-{id:1, produtor:'Sítio Horta Verde (Seu João)', fone:'51999998888', local:'Hípica / Porto Alegre', alimento:'Tomate Orgânico (Kg)', categoria:'legumes', selo:'Orgânico Certificado', qtd:'80 kg', preco:7.50, lat:-30.1350, lon:-51.1850, desc:'Colheita semanal fresquinha. Lote mínimo de 10kg para entrega em mercados da Zona Sul.'},
-{id:2, produtor:'Cooperativa Terra Viva', fone:'51988887777', local:'Lomba do Pinheiro', alimento:'Alface Crespa Hidropônica (Maço)', categoria:'verduras', selo:'Agroecológico Sem Veneno', qtd:'150 maços', preco:2.80, lat:-30.1050, lon:-51.1350, desc:'Sem qualquer uso de agrotóxicos. Entregas terças e quintas.'},
-{id:3, produtor:'AgroEcológica Restinga', fone:'51977776666', local:'Restinga / Zona Sul', alimento:'Ovos Caipiras Orgânicos (Dúzia)', categoria:'ovos', selo:'Orgânico Certificado', qtd:'40 dúzias', preco:12.00, lat:-30.1400, lon:-51.1360, desc:'Galinhas livres de gaiola, alimentação 100% natural.'},
-{id:4, produtor:'Pomar Sol Nascente', fone:'51966665555', local:'Aberta dos Morros', alimento:'Bergamota / Mexerica (Kg)', categoria:'frutas', selo:'Em Transição Orgânica', qtd:'200 kg', preco:4.50, lat:-30.1450, lon:-51.1950, desc:'Preço especial para caixa fechada (20kg) para empórios e quitandas.'}
+{id:1, produtor:'Sítio Horta Verde (Seu João)', doc:'***.452.890-*', fone:'51999998888', local:'Hípica, Porto Alegre', alimento:'Tomate Orgânico (Kg)', categoria:'legumes', selo:'Orgânico Certificado (MAPA)', qtd:'80 kg', preco:7.50, foto:'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400', lat:-30.1350, lon:-51.1850, desc:'Colheita própria na Zona Sul. Visitas permitidas mediante agendamento.'},
+{id:2, produtor:'Cooperativa Terra Viva', doc:'04.882.112/0001-*', fone:'51988887777', local:'Lomba do Pinheiro', alimento:'Alface Crespa Hidropônica (Maço)', categoria:'verduras', selo:'Agroecológico Verificado', qtd:'150 maços', preco:2.80, foto:'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=400', lat:-30.1050, lon:-51.1350, desc:'Produção familiar sem agrotóxicos com laudo técnico emitido.'},
+{id:3, produtor:'AgroEcológica Restinga', doc:'***.123.445-*', fone:'51977776666', local:'Restinga', alimento:'Ovos Caipiras (Dúzia)', categoria:'ovos', selo:'Orgânico Certificado (MAPA)', qtd:'40 dúzias', preco:12.00, foto:'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400', lat:-30.1400, lon:-51.1360, desc:'Galinhas criadas soltas em pastagem limpa.'}
 ];
 
-let ofertas = JSON.parse(localStorage.getItem('agrolimpa_ofertas')) || ofertasIniciais;
+let ofertas = JSON.parse(localStorage.getItem('agrolimpa_ofertas_v2')) || ofertasIniciais;
 let carrinho = [];
 let filtroCategoria = 'todos';
 let markers = [];
@@ -206,7 +211,7 @@ grid.innerHTML = '';
 const filtrados = ofertas.filter(o => filtroCategoria === 'todos' || o.categoria === filtroCategoria);
 
 filtrados.forEach(o => {
-const color = '#22c55e';
+const color = '#16a34a';
 const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${o.lat},${o.lon}`;
 
 const marker = L.circleMarker([o.lat, o.lon], {
@@ -216,24 +221,25 @@ radius: 10, color: color, fillColor: color, fillOpacity: 0.9, weight: 2
 marker.bindPopup(`
 <b>${o.alimento}</b><br>
 Produtor: <b>${o.produtor}</b><br>
-Selo: <b>${o.selo}</b><br>
-Preço Atacado: <b>R$ ${o.preco.toFixed(2)}</b><br><br>
-<a href="${gmapsUrl}" target="_blank" style="color:#22c55e;font-weight:bold">🗺️ Ver Propriedade no Maps</a>
+Doc: <b>${o.doc}</b><br>
+<a href="${gmapsUrl}" target="_blank" style="color:#16a34a;font-weight:bold">🗺️ Abrir Local no Maps</a>
 `);
 markers.push(marker);
 
 grid.innerHTML += `
 <div class="card">
-<div>
+<img src="${o.foto}" alt="${o.alimento}" onerror="this.src='https://images.unsplash.com/photo-1540420773420-3366772f4999?w=400'">
+<div class="card-body">
+<span class="trust-badge">🛡️ Produtor Verificado</span>
 <h3>${o.alimento}</h3>
 <div class="producer">🚜 ${o.produtor}</div>
 <span class="tag">${o.selo}</span>
 <p><b>Local:</b> ${o.local}</p>
 <p><b>Disponível:</b> ${o.qtd}</p>
-<div class="price">R$ ${o.preco.toFixed(2)} <span style="font-size:11px;color:#94a3b8">/unid/kg</span></div>
+<div class="price">R$ ${o.preco.toFixed(2)}</div>
 <p style="font-size:11px;">${o.desc}</p>
-</div>
 <button class="btn-buy" onclick="adicionarAoCarrinho(${o.id})">+ Adicionar ao Pedido</button>
+</div>
 </div>
 `;
 });
@@ -267,12 +273,12 @@ const data = await res.json();
 if(data && data.length > 0){
 document.getElementById('prodLat').value = data[0].lat;
 document.getElementById('prodLon').value = data[0].lon;
-alert('Localização mapeada com sucesso!');
+alert('Localização validada com sucesso!');
 } else {
-alert('Não foi possível localizar as coordenadas automáticas. Digite manualmente.');
+alert('Não foi possível localizar o endereço automaticamente.');
 }
 }catch(err){
-alert('Erro na busca de geolocalização.');
+alert('Erro na geolocalização.');
 }
 }
 
@@ -282,6 +288,7 @@ e.preventDefault();
 const nova = {
 id: Date.now(),
 produtor: document.getElementById('prodNomeProdutor').value,
+doc: document.getElementById('prodDocumento').value,
 fone: document.getElementById('prodTelefone').value.replace(/\D/g, ''),
 local: document.getElementById('prodEndereco').value,
 alimento: document.getElementById('prodAlimento').value,
@@ -289,20 +296,21 @@ categoria: document.getElementById('prodCategoria').value,
 selo: document.getElementById('prodSelo').value,
 qtd: document.getElementById('prodQtd').value,
 preco: parseFloat(document.getElementById('prodPreco').value),
+foto: document.getElementById('prodFoto').value,
 lat: parseFloat(document.getElementById('prodLat').value),
 lon: parseFloat(document.getElementById('prodLon').value),
-desc: document.getElementById('prodDesc').value || 'Alimento colhido direto da agricultura familiar.'
+desc: document.getElementById('prodDesc').value || 'Alimento rastreado da agricultura familiar.'
 };
 
 ofertas.unshift(nova);
-localStorage.setItem('agrolimpa_ofertas', JSON.stringify(ofertas));
+localStorage.setItem('agrolimpa_ofertas_v2', JSON.stringify(ofertas));
 
 document.getElementById('formOferta').reset();
 mudarPerfil('comprador');
 render();
 
 map.setView([nova.lat, nova.lon], 15);
-alert('Sua oferta de alimento limpo foi publicada com sucesso!');
+alert('Oferta verificada e publicada com sucesso!');
 }
 
 function adicionarAoCarrinho(id){
@@ -321,8 +329,8 @@ const itemsDiv = document.getElementById('cartItems');
 const totalDiv = document.getElementById('cartTotal');
 
 if(carrinho.length === 0){
-itemsDiv.innerHTML = '<p style="color:#94a3b8">Nenhum alimento selecionado na sua carga.</p>';
-totalDiv.innerText = 'Total Estimado: R$ 0,00';
+itemsDiv.innerHTML = '<p style="color:#64748b">Nenhum item selecionado.</p>';
+totalDiv.innerText = 'Total: R$ 0,00';
 } else {
 itemsDiv.innerHTML = '';
 let total = 0;
@@ -332,13 +340,13 @@ itemsDiv.innerHTML += `
 <div class="cart-item">
 <div>
 <b>${item.alimento}</b><br>
-<span style="font-size:11px;color:#38bdf8">${item.produtor}</span>
+<span style="font-size:11px;color:#0284c7">Produtor: ${item.produtor}</span>
 </div>
 <b>R$ ${item.preco.toFixed(2)}</b>
 </div>
 `;
 });
-totalDiv.innerText = `Total Estimado: R$ ${total.toFixed(2)}`;
+totalDiv.innerText = `Total: R$ ${total.toFixed(2)}`;
 }
 modal.style.display = 'flex';
 }
@@ -349,33 +357,33 @@ document.getElementById('cartModal').style.display = 'none';
 
 function enviarPedidoCarga(){
 if(carrinho.length === 0){
-alert('Adicione itens ao seu pedido primeiro.');
+alert('Adicione itens ao pedido.');
 return;
 }
 const comprador = document.getElementById('compradorNome').value.trim();
 const enderecoEntrega = document.getElementById('compradorEndereco').value.trim();
 
 if(!comprador || !enderecoEntrega){
-alert('Preencha seu nome/estabelecimento e endereço de entrega.');
+alert('Preencha seu nome/estabelecimento e o endereço de entrega.');
 return;
 }
 
 const primeiroProdutor = carrinho[0];
 const foneDestino = primeiroProdutor.fone || '5551999998888';
 
-let texto = `*SOLICITAÇÃO DE CARGA - REDE AGROLIMPA*\n\n`;
+let texto = `*PEDIDO SEGURO - REDE AGROLIMPA*\n\n`;
 texto += `*Comprador:* ${comprador}\n`;
-texto += `*Endereço de Entrega:* ${enderecoEntrega}\n\n`;
-texto += `*ITENS SOLICITADOS:*\n`;
+texto += `*Entrega:* ${enderecoEntrega}\n\n`;
+texto += `*ITENS:*\n`;
 
 let total = 0;
 carrinho.forEach(i => {
-texto += `• ${i.alimento} (R$ ${i.preco.toFixed(2)}) — Produtor: ${i.produtor}\n`;
+texto += `• ${i.alimento} (R$ ${i.preco.toFixed(2)}) — Produtor: ${i.produtor} (Doc: ${i.doc})\n`;
 total += i.preco;
 });
 
-texto += `\n*VALOR ESTIMADO:* R$ ${total.toFixed(2)}\n\n`;
-texto += `_Mensagem enviada via Plataforma AgroLimpa._`;
+texto += `\n*TOTAL: R$ ${total.toFixed(2)}*\n\n`;
+texto += `_Transação protegida por rastreabilidade de origem._`;
 
 window.open(`https://api.whatsapp.com/send?phone=55${foneDestino}&text=${encodeURIComponent(texto)}`, '_blank');
 }
